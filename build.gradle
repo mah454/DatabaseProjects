@@ -1,0 +1,19 @@
+subprojects {
+    group 'ir.moke.database'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        compile fileTree (dir: "${rootProject.rootDir}/libs",includes: ["*.jar"])
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+}
