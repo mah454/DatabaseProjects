@@ -13,6 +13,7 @@ subprojects {
     }
 
     dependencies {
+        compile 'org.flywaydb:flyway-core:4.2.0'
         compile fileTree (dir: "${rootProject.rootDir}/libs",includes: ["*.jar"])
         testCompile group: 'junit', name: 'junit', version: '4.12'
     }
