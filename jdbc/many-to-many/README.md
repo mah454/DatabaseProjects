@@ -1,0 +1,31 @@
+## Many-to-One relationship :
+
+* Create table persons :
+```oracle
+CREATE TABLE PERSONS (
+  ID     NUMBER NOT NULL PRIMARY KEY ,
+  NAME   VARCHAR2(20) ,
+  FAMILY VARCHAR2(20)
+);
+```
+
+* Create table cars : 
+
+```oracle
+CREATE TABLE CARS (
+  ID   NUMBER NOT NULL UNIQUE ,
+  NAME VARCHAR2(20)
+);
+```
+
+* Create table persons_cars :
+```oracle
+CREATE TABLE PERSONS_CARS (
+  ID NUMBER NOT NULL ,
+  PERSON_ID NUMBER NOT NULL ,
+  CAR_ID NUMBER NOT NULL , 
+  PRIMARY KEY (PERSON_ID,CAR_ID),
+  FOREIGN KEY (PERSON_ID) REFERENCES PERSONS(ID) ON DELETE CASCADE ,
+  FOREIGN KEY (CAR_ID) REFERENCES CARS(ID) ON DELETE CASCADE 
+) ;
+```

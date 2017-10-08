@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PersonDao {
     private Connection connection;
-    private PreparedStatement preparedStatement ;
+    private PreparedStatement preparedStatement;
 
     static {
         try {

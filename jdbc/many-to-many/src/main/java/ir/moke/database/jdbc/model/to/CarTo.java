@@ -1,26 +1,28 @@
 package ir.moke.database.jdbc.model.to;
 
+import java.util.List;
+
 public class CarTo {
     private long id ;
     private String name ;
-    private PersonTo personTo ;
+    private List<PersonsCars> personsCars ;
 
-    public CarTo(long id, String name , PersonTo personTo) {
+    public CarTo(long id, String name,List<PersonsCars> personsCars) {
         this.id = id;
         this.name = name;
-        this.personTo = personTo ;
+        this.personsCars = personsCars;
     }
 
     public CarTo() {
 
     }
 
-    public PersonTo getPersonTo() {
-        return personTo;
+    public List<PersonsCars> getPersonsCars() {
+        return personsCars;
     }
 
-    public void setPersonTo(PersonTo personTo) {
-        this.personTo = personTo;
+    public void setPersonsCars(List<PersonsCars> personsCars) {
+        this.personsCars = personsCars;
     }
 
     public long getId() {
@@ -44,7 +46,7 @@ public class CarTo {
         return "CarTo{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", personTo=" + personTo +
+                ", personsCars=" + personsCars +
                 '}';
     }
 }

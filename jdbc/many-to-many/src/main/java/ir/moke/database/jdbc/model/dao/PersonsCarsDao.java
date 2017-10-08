@@ -1,13 +1,11 @@
 package ir.moke.database.jdbc.model.dao;
 
-import ir.moke.database.jdbc.model.to.CarTo;
-import ir.moke.database.jdbc.model.to.PersonTo;
-
+import ir.moke.database.jdbc.model.to.PersonsCars;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarDao {
+public class PersonsCarsDao {
     private Connection connection;
     private PreparedStatement preparedStatement;
 
@@ -19,7 +17,7 @@ public class CarDao {
         }
     }
 
-    public CarDao() {
+    public PersonsCarsDao() {
         try {
             connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "mahsom", "mypass");
         } catch (SQLException e) {
@@ -27,12 +25,12 @@ public class CarDao {
         }
     }
 
-    public void insert(CarTo carTo) {
+    public void insert(PersonsCars personsCars) {
         try {
-            preparedStatement = connection.prepareStatement("insert into cars (id,name,fk_person) values(?,?,?)");
-            preparedStatement.setLong(1, carTo.getId());
-            preparedStatement.setString(2, carTo.getName());
-            preparedStatement.setLong(3, carTo.getPersonTo().getId());
+            preparedStatement = connection.prepareStatement("insert into persons_cars (id,person_id,car_id) values(?,?,?)");
+            preparedStatement.setLong(1, personsCars.getId());
+            preparedStatement.setLong(2, personsCars.getPersonId());
+            preparedStatement.setLong(3, personsCars.getCarId());
             preparedStatement.executeUpdate();
             close();
         } catch (SQLException e) {
@@ -40,12 +38,12 @@ public class CarDao {
         }
     }
 
-    public void update(CarTo carTo) {
+    public void update(PersonsCars personsCars) {
         try {
-            preparedStatement = connection.prepareStatement("update cars set name=? and fk_person=? where id=?");
-            preparedStatement.setString(1, carTo.getName());
-            preparedStatement.setLong(2, carTo.getPersonTo().getId());
-            preparedStatement.setLong(3, carTo.getId());
+            preparedStatement = connection.prepareStatement("update persons_cars set person_id=? and car_id=? where id=?");
+            preparedStatement.setLong(1, personsCars.getPersonId());
+            preparedStatement.setLong(2, personsCars.getCarId());
+            preparedStatement.setLong(3, personsCars.getId());
             preparedStatement.executeUpdate();
             close();
         } catch (SQLException e) {
@@ -55,7 +53,7 @@ public class CarDao {
 
     public void delete(long id) {
         try {
-            preparedStatement = connection.prepareStatement("delete from cars where id=?");
+            preparedStatement = connection.prepareStatement("delete from persons_cars where id=?");
             preparedStatement.setLong(1, id);
             preparedStatement.execute();
             close();
@@ -64,27 +62,27 @@ public class CarDao {
         }
     }
 
-    public CarTo select(long id) {
-        CarTo carTo = new CarTo();
+    public PersonsCars select(long id) {
+        PersonsCars personsCars = new PersonsCars();
         try {
-            preparedStatement = connection.prepareStatement("select * from cars where id=?");
+            preparedStatement = connection.prepareStatement("select * from persons_cars where id=?");
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                carTo = unmarshaller(resultSet);
+                personsCars = unmarshaller(resultSet);
             }
             close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return carTo;
+        return personsCars;
     }
 
 
-    public List<CarTo> select() {
-        List<CarTo> list = new ArrayList<>();
+    public List<PersonsCars> select() {
+        List<PersonsCars> list = new ArrayList<>();
         try {
-            preparedStatement = connection.prepareStatement("select * from cars");
+            preparedStatement = connection.prepareStatement("select * from persons_cars");
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 list.add(unmarshaller(resultSet));
@@ -96,18 +94,16 @@ public class CarDao {
         return list;
     }
 
-    private static CarTo unmarshaller(ResultSet resultSet) {
-        CarTo carTo = new CarTo();
-        PersonTo personTo = new PersonTo();
+    private static PersonsCars unmarshaller(ResultSet resultSet) {
+        PersonsCars personsCars = new PersonsCars();
         try {
-            carTo.setId(resultSet.getLong("id"));
-            carTo.setName(resultSet.getString("name"));
-            personTo.setId(resultSet.getLong("fk_person"));
-            carTo.setPersonTo(personTo);
+            personsCars.setId(resultSet.getLong("id"));
+            personsCars.setPersonId(resultSet.getLong("person_id"));
+            personsCars.setCarId(resultSet.getLong("car_id"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return carTo;
+        return personsCars;
     }
 
     private void close() {
